@@ -21,3 +21,19 @@ class Solution:
             max_length = max(max_length, right - left + 1)
 
         return max_length 
+
+    def checkIfExist(self, nums: List[int]) -> bool:
+        nums.sort()
+        l = 0
+        r = len(nums) - 1
+        while l < r: 
+            # Debug print statement to trace values
+            print(f"l: {l}, r: {r}, nums[l]: {nums[l]}, nums[r]: {nums[r]}")
+            
+            if nums[l] * 2 == nums[r]:
+                return True 
+            elif nums[l] * 2 < nums[r]:
+                r -= 1
+            else:
+                l += 1
+        return False 
