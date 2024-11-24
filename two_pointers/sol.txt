@@ -1,0 +1,80 @@
+Here’s the text translated and structured in English:
+
+---
+
+### Problem Statement: "Longest Repeating Character Replacement"
+
+**Objective**:  
+Given a string `s` and an integer `k`, you can replace any character in the string with any other uppercase English character. You are allowed to perform this replacement operation at most `k` times.  
+
+**Goal**:  
+Return the length of the longest substring you can achieve where all characters are the same after performing the above operations.  
+
+---
+
+### Example:  
+
+Input:  
+```plaintext
+s = "ABABBA", k = 2
+```
+
+**How to Approach?**  
+1. First, check if a substring is valid.  
+   - **Definition of Valid Substring**:  
+     A substring is valid if the following condition holds:  
+     \[
+     \text{length of substring} - \text{frequency of the most frequent character} \leq k
+     \]
+     This formula ensures that you can convert the remaining characters in the substring to match the most frequent character using at most `k` replacements.
+
+---
+
+### Steps to Solve:
+1. **Efficiently Check All Substrings**:  
+   Use the **sliding window technique** with two pointers (`left` and `right`) to scan substrings without recalculating everything repeatedly.
+
+2. **Track the Most Frequent Character**:  
+   Use a **hashmap** (or dictionary) to store the frequency of each character in the current window.
+
+3. **Initialize and Update the Longest Substring**:  
+   - Start with a variable called `longest`, initialized to 0.
+   - Update `longest` whenever a valid substring is found.
+
+4. **Expand or Shrink the Window**:  
+   - Expand the window by moving the `right` pointer.
+   - If the current substring is invalid (based on the condition above), shrink the window by moving the `left` pointer.
+
+---
+
+### Code (Starting Point):
+
+```python
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        n = len(s)
+        left = 0
+        longest = 0
+        char_count = {}
+        
+        for right in range(n):
+            # Add current character to the hashmap
+            char_count[s[right]] = char_count.get(s[right], 0) + 1
+            
+            # Check if the window is valid
+            while (right - left + 1) - max(char_count.values()) > k:
+                # Shrink the window from the left
+                char_count[s[left]] -= 1
+                if char_count[s[left]] == 0:
+                    del char_count[s[left]]
+                left += 1
+            
+            # Update the longest valid substring
+            longest = max(longest, right - left + 1)
+        
+        return longest
+```
+
+---
+
+This implementation efficiently calculates the longest substring using the sliding window technique and ensures we only calculate frequencies for the current window.
